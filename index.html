@@ -97,6 +97,10 @@
                 🎯 Dar Palpite Final (Acusar Suspeito)
             </button>
 
+            <button id="btn-turn" onclick="passTurn()" class="w-full font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 shadow">
+                Cargando Turno...
+            </button>
+
             <div id="board-grid" class="grid grid-cols-3 gap-2 w-full"></div>
         </div>
 
@@ -185,6 +189,7 @@
         let opponentCharacterId = null;
         let isGuessMode = false;
         let pendingAccusationId = null;
+        let isMyTurn = false;
         
         let score = { red: 0, blue: 0 };
         let localPlayerReadyForNext = false;
@@ -374,6 +379,9 @@
                 } else if (data.type === 'NEXT_GAME_READY') {
                     opponentReadyForNext = true;
                     checkNextGameTransition();
+                } else if (data.type === 'TURN_CHANGED') {
+                    isMyTurn = true;
+                    updateTurnUI();
                 }
             });
 
@@ -520,6 +528,10 @@
             isGuessMode = false;
             updateGuessButtonUI();
 
+            // P1 (red) começa jogando
+            isMyTurn = (myRole === 'red');
+            updateTurnUI();
+
             const myChar = characters.find(c => c.id === selectedCharacterId);
             document.getElementById('my-secret-avatar').src = myChar.url;
             document.getElementById('my-secret-name').innerText = myChar.name;
@@ -564,6 +576,28 @@
             } else {
                 btn.className = "w-full bg-slate-800 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition border border-slate-700";
                 btn.innerText = "🎯 Dar Palpite Final (Acusar Suspeito)";
+            }
+        }
+
+        function updateTurnUI() {
+            const btnTurn = document.getElementById('btn-turn');
+            if (isMyTurn) {
+                btnTurn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/20 cursor-pointer";
+                btnTurn.innerText = "🟢 SUA VEZ (Finalizar Pergunta e Passar Vez)";
+                btnTurn.disabled = false;
+            } else {
+                btnTurn.className = "w-full bg-slate-800 text-slate-500 font-bold py-2.5 rounded-xl text-xs transition border border-slate-700/50 cursor-not-allowed";
+                btnTurn.innerText = "⏳ VEZ DO OPONENTE (Aguardando...)";
+                btnTurn.disabled = true;
+            }
+        }
+
+        function passTurn() {
+            if (!isMyTurn) return;
+            isMyTurn = false;
+            updateTurnUI();
+            if (conn) {
+                conn.send({ type: 'TURN_CHANGED' });
             }
         }
 
@@ -614,7 +648,6 @@
             if (winner === 'red') score.red++;
             if (winner === 'blue') score.blue++;
             
-            // Atualiza o placar no topo imediatamente
             updateScoreboardVisual();
             saveGameState();
 
@@ -670,7 +703,6 @@
                 selectedCharacterId = null;
                 opponentCharacterId = null;
                 
-                // Limpa o tabuleiro do DOM para evitar que o salvamento automático herde as cartas viradas do jogo anterior
                 document.getElementById('board-grid').innerHTML = '';
                 
                 localStorage.removeItem(`cara_my_char_${roomCode}`);
