@@ -50,7 +50,43 @@
             </div>
         </div>
 
-        <div id="screen-select" class="w-full space-y-4 text-center">
+        <div id="game-scoreboard" class="hidden w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-2xl flex items-center justify-between relative overflow-hidden mb-3">
+            <div id="p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
+                <img id="p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
+                <span id="p1-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+            </div>
+
+            <div class="flex flex-col justify-between h-28 flex-1 px-3 min-w-0">
+                <div class="flex flex-col items-start leading-tight text-left w-full">
+                    <span class="text-red-400 font-black text-xs tracking-wide whitespace-nowrap">P1 (Vermelho)</span>
+                    <div class="flex items-center space-x-1 mt-0.5 justify-start">
+                        <span id="status-dot-p1" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                        <span id="status-text-p1" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
+                    </div>
+                </div>
+
+                <div class="select-none shrink-0 py-0.5 self-center flex items-center space-x-2">
+                    <span id="score-red" class="bg-slate-950 px-1.5 py-0.5 rounded text-white font-mono text-xs font-bold shrink-0">0</span>
+                    <span class="bg-gradient-to-r from-red-500 to-blue-500 text-transparent bg-clip-text font-black italic text-base tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">VS</span>
+                    <span id="score-blue" class="bg-slate-950 px-1.5 py-0.5 rounded text-white font-mono text-xs font-bold shrink-0">0</span>
+                </div>
+
+                <div class="flex flex-col items-end leading-tight text-right w-full">
+                    <span class="text-blue-400 font-black text-xs tracking-wide whitespace-nowrap">P2 (Azul)</span>
+                    <div class="flex items-center space-x-1 mt-0.5 justify-end">
+                        <span id="status-text-p2" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
+                        <span id="status-dot-p2" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p2-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
+                <img id="p2-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
+                <span id="p2-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+            </div>
+        </div>
+
+        <div id="screen-select" class="hidden w-full space-y-4 text-center">
             <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
                 <h2 id="select-screen-title" class="text-base font-bold text-amber-400">Escolha o SEU Personagem Secreto</h2>
                 <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente terá que adivinhar quem você escolheu.</p>
@@ -60,46 +96,6 @@
         </div>
 
         <div id="screen-game" class="hidden w-full space-y-3">
-            
-            <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-2xl flex items-center justify-between w-full relative overflow-hidden">
-                
-                <div id="p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
-                    <img id="p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
-                    <span id="p1-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
-                </div>
-
-                <div class="flex flex-col justify-between h-28 flex-1 px-3 min-w-0">
-                    
-                    <div class="flex flex-col items-start leading-tight text-left w-full">
-                        <span class="text-red-400 font-black text-xs tracking-wide whitespace-nowrap">P1 (Vermelho)</span>
-                        <div class="flex items-center space-x-1 mt-0.5 justify-start">
-                            <span id="status-dot-p1" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
-                            <span id="status-text-p1" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
-                        </div>
-                    </div>
-
-                    <div class="select-none shrink-0 py-0.5 self-center flex items-center space-x-2">
-                        <span id="score-red" class="bg-slate-950 px-1.5 py-0.5 rounded text-white font-mono text-xs font-bold shrink-0">0</span>
-                        <span class="bg-gradient-to-r from-red-500 to-blue-500 text-transparent bg-clip-text font-black italic text-base tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">VS</span>
-                        <span id="score-blue" class="bg-slate-950 px-1.5 py-0.5 rounded text-white font-mono text-xs font-bold shrink-0">0</span>
-                    </div>
-
-                    <div class="flex flex-col items-end leading-tight text-right w-full">
-                        <span class="text-blue-400 font-black text-xs tracking-wide whitespace-nowrap">P2 (Azul)</span>
-                        <div class="flex items-center space-x-1 mt-0.5 justify-end">
-                            <span id="status-text-p2" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
-                            <span id="status-dot-p2" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="p2-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
-                    <img id="p2-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
-                    <span id="p2-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
-                </div>
-
-            </div>
-
             <button id="btn-guess-mode" onclick="toggleGuessMode()" class="w-full bg-slate-800 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 shadow shadow-amber-500/10">
                 🎯 Dar Palpite Final (Acusar Suspeito)
             </button>
@@ -458,6 +454,7 @@
                 } else {
                     screenGame.classList.add('hidden');
                     screenSelect.classList.add('hidden');
+                    document.getElementById('game-scoreboard').classList.add('hidden');
                     document.getElementById('game-over-screen').classList.add('hidden');
                     document.getElementById('confirm-modal').classList.add('hidden');
                     document.getElementById('char-confirm-modal').classList.add('hidden');
@@ -515,6 +512,16 @@
             document.getElementById('game-over-screen').classList.add('hidden');
             document.getElementById('confirm-modal').classList.add('hidden');
             document.getElementById('char-confirm-modal').classList.add('hidden');
+            
+            // Exibe o placar e força os avatares a exibirem o "?" durante a seleção
+            document.getElementById('game-scoreboard').classList.remove('hidden');
+            document.getElementById('p1-avatar-bg').style.backgroundImage = "none";
+            document.getElementById('p1-avatar').classList.add('hidden');
+            document.getElementById('p1-avatar-placeholder').classList.remove('hidden');
+            document.getElementById('p2-avatar-bg').style.backgroundImage = "none";
+            document.getElementById('p2-avatar').classList.add('hidden');
+            document.getElementById('p2-avatar-placeholder').classList.remove('hidden');
+
             screenSelect.classList.remove('hidden');
             
             const selectTitle = document.getElementById('select-screen-title');
@@ -646,6 +653,7 @@
             document.getElementById('char-confirm-modal').classList.add('hidden');
             screenLobby.classList.add('hidden'); 
             screenSelect.classList.add('hidden');
+            document.getElementById('game-scoreboard').classList.remove('hidden');
             screenGame.classList.remove('hidden');
             isGuessMode = false;
             updateGuessButtonUI();
