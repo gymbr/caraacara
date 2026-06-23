@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <div id="game-scoreboard" class="hidden w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-2xl flex items-center justify-between relative overflow-hidden mb-3">
+        <div id="game-scoreboard" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-2xl flex items-center justify-between relative overflow-hidden mb-3">
             <div id="p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
                 <img id="p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
                 <span id="p1-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <div id="screen-select" class="hidden w-full space-y-4 text-center">
+        <div id="screen-select" class="w-full space-y-4 text-center">
             <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
                 <h2 id="select-screen-title" class="text-base font-bold text-amber-400">Escolha o SEU Personagem Secreto</h2>
                 <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente tera que adivinhar quem voce escolheu.</p>
@@ -512,8 +512,8 @@
                         }
                     } else {
                         screenGame.classList.add('hidden');
-                        screenSelect.classList.add('hidden');
-                        document.getElementById('game-scoreboard').classList.add('hidden');
+                        screenSelect.classList.remove('hidden');
+                        document.getElementById('game-scoreboard').classList.remove('hidden');
                         document.getElementById('game-over-screen').classList.add('hidden');
                         document.getElementById('confirm-modal').classList.add('hidden');
                         document.getElementById('char-confirm-modal').classList.add('hidden');
