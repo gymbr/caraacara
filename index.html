@@ -158,16 +158,14 @@
                         <div class="text-center">
                             <p class="text-[10px] text-red-400 font-bold">Vermelho era:</p>
                             <div id="reveal-red-bg" class="w-16 h-20 mx-auto rounded-lg my-1 border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden">
-                                <img id="reveal-red-img" class="w-full h-auto drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
+                                <img id="reveal-red-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
                             </div>
-                            <p id="reveal-red-name" class="text-xs font-bold"></p>
                         </div>
                         <div class="text-center">
                             <p class="text-[10px] text-blue-400 font-bold">Azul era:</p>
                             <div id="reveal-blue-bg" class="w-16 h-20 mx-auto rounded-lg my-1 border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden">
-                                <img id="reveal-blue-img" class="w-full h-auto drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
+                                <img id="reveal-blue-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
                             </div>
-                            <p id="reveal-blue-name" class="text-xs font-bold"></p>
                         </div>
                     </div>
                 </div>
@@ -748,11 +746,9 @@
 
             document.getElementById('reveal-red-bg').style.backgroundImage = "url('img/fundovermelho.png')";
             document.getElementById('reveal-red-img').src = rChar.url;
-            document.getElementById('reveal-red-name').innerText = rChar.name;
 
             document.getElementById('reveal-blue-bg').style.backgroundImage = "url('img/fundoazul.png')";
             document.getElementById('reveal-blue-img').src = bChar.url;
-            document.getElementById('reveal-blue-name').innerText = bChar.name;
 
             localPlayerReadyForNext = false;
             opponentReadyForNext = false;
