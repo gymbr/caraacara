@@ -169,9 +169,12 @@
 
                 <!-- PLACAR ESPELHADO INTERNO -->
                 <div id="modal-scoreboard" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-xl flex items-center justify-between relative overflow-hidden">
-                    <div id="modal-p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
-                        <img id="modal-p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
-                        <span id="modal-p1-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+                    <div class="flex flex-col items-center shrink-0">
+                        <div id="modal-p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow bg-slate-950">
+                            <img id="modal-p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
+                            <span id="modal-p1-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+                        </div>
+                        <span id="label-p1" class="text-[10px] font-bold mt-1 uppercase tracking-wider text-slate-400">P1</span>
                     </div>
 
                     <div class="flex flex-col justify-between h-28 flex-1 px-3 min-w-0">
@@ -198,9 +201,12 @@
                         </div>
                     </div>
 
-                    <div id="modal-p2-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
-                        <img id="modal-p2-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
-                        <span id="modal-p2-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+                    <div class="flex flex-col items-center shrink-0">
+                        <div id="modal-p2-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow bg-slate-950">
+                            <img id="modal-p2-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
+                            <span id="modal-p2-avatar-placeholder" class="text-2xl font-black text-slate-600 font-mono">?</span>
+                        </div>
+                        <span id="label-p2" class="text-[10px] font-bold mt-1 uppercase tracking-wider text-slate-400">P2</span>
                     </div>
                 </div>
 
@@ -655,7 +661,7 @@
 
             characters.forEach(char => {
                 const card = document.getElementById(`select-card-${char.id}`);
-                if (card) card.onclick = null;
+                if (char) char.onclick = null;
             });
 
             checkBothSelected();
@@ -876,7 +882,6 @@
                 }
             }
 
-            // Exibe a foto do personagem escolhido para o palpite
             if (guessedCharId) {
                 const gChar = characters.find(c => c.id === guessedCharId);
                 const guesserBg = guesser === 'red' ? "url('img/fundovermelho.png')" : "url('img/fundoazul.png')";
@@ -912,7 +917,6 @@
             const rChar = characters.find(c => c.id === redCharId);
             const bChar = characters.find(c => c.id === blueCharId);
 
-            // REVELAÇÃO DOS PERSONAGENS DIRETO NO PLACAR INTERNO DO MODAL
             document.getElementById('modal-p1-avatar-bg').style.backgroundImage = "url('img/fundovermelho.png')";
             document.getElementById('modal-p1-avatar').src = rChar.url;
             document.getElementById('modal-p1-avatar').classList.remove('hidden');
@@ -922,6 +926,21 @@
             document.getElementById('modal-p2-avatar').src = bChar.url;
             document.getElementById('modal-p2-avatar').classList.remove('hidden');
             document.getElementById('modal-p2-avatar-placeholder').classList.add('hidden');
+
+            // ATUALIZAÇÃO DINÂMICA DAS LABELS "VOCÊ" / "OPONENTE"
+            const labelP1 = document.getElementById('label-p1');
+            const labelP2 = document.getElementById('label-p2');
+            if (myRole === 'red') {
+                labelP1.innerText = "Você";
+                labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
+                labelP2.innerText = "Oponente";
+                labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
+            } else {
+                labelP1.innerText = "Oponente";
+                labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
+                labelP2.innerText = "Você";
+                labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
+            }
 
             localPlayerReadyForNext = false;
             opponentReadyForNext = false;
