@@ -114,6 +114,7 @@
         <div id="char-confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
             <div class="bg-slate-900 border-2 border-amber-500 p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
                 <h3 id="char-confirm-title" class="text-lg font-black text-amber-400 tracking-wide">CONFIRMAR PERSONAGEM?</h3>
+                <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente terá que adivinhar quem você escolheu.</p>
                 <div id="char-confirm-modal-bg" class="w-24 h-32 mx-auto rounded-lg border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow-inner">
                     <img id="char-confirm-modal-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
                 </div>
@@ -516,7 +517,9 @@
             document.getElementById('char-confirm-modal').classList.add('hidden');
             screenSelect.classList.remove('hidden');
             
-            document.getElementById('select-screen-title').innerText = "Escolha o SEU Personagem Secreto";
+            const selectTitle = document.getElementById('select-screen-title');
+            selectTitle.innerText = "Escolha o SEU Personagem Secreto";
+            selectTitle.classList.remove('animate-pulse');
 
             const selectGrid = document.getElementById('select-grid');
             selectGrid.innerHTML = '';
@@ -540,12 +543,16 @@
                 const current = document.getElementById(`select-card-${selectedCharacterId}`);
                 if (current) current.classList.add('border-amber-400', 'bg-slate-700', 'scale-105');
                 
-                document.getElementById('select-screen-title').innerText = "Aguardando oponente escolher...";
+                selectTitle.innerText = "Aguardando oponente escolher...";
+                selectTitle.classList.add('animate-pulse');
                 
                 temporarySelectedId = selectedCharacterId;
                 const char = characters.find(c => c.id === selectedCharacterId);
                 
-                document.getElementById('char-confirm-title').innerText = "Aguardando oponente escolher...";
+                const confirmTitle = document.getElementById('char-confirm-title');
+                confirmTitle.innerText = "Aguardando oponente escolher...";
+                confirmTitle.classList.add('animate-pulse');
+                
                 document.getElementById('char-confirm-buttons').classList.add('hidden');
                 document.getElementById('char-waiting-buttons').classList.remove('hidden');
                 
@@ -565,7 +572,10 @@
             const char = characters.find(c => c.id === id);
             const bgUrl = myRole === 'red' ? 'img/fundovermelho.png' : 'img/fundoazul.png';
             
-            document.getElementById('char-confirm-title').innerText = "CONFIRMAR PERSONAGEM?";
+            const confirmTitle = document.getElementById('char-confirm-title');
+            confirmTitle.innerText = "CONFIRMAR PERSONAGEM?";
+            confirmTitle.classList.remove('animate-pulse');
+            
             document.getElementById('char-confirm-buttons').classList.remove('hidden');
             document.getElementById('char-waiting-buttons').classList.add('hidden');
             
@@ -583,7 +593,10 @@
             if (!temporarySelectedId) return;
             selectedCharacterId = temporarySelectedId;
 
-            document.getElementById('char-confirm-title').innerText = "Aguardando oponente escolher...";
+            const confirmTitle = document.getElementById('char-confirm-title');
+            confirmTitle.innerText = "Aguardando oponente escolher...";
+            confirmTitle.classList.add('animate-pulse');
+            
             document.getElementById('char-confirm-buttons').classList.add('hidden');
             document.getElementById('char-waiting-buttons').classList.remove('hidden');
 
@@ -595,7 +608,9 @@
             }
             saveGameState();
             
-            document.getElementById('select-screen-title').innerText = "Aguardando oponente escolher...";
+            const selectTitle = document.getElementById('select-screen-title');
+            selectTitle.innerText = "Aguardando oponente escolher...";
+            selectTitle.classList.add('animate-pulse');
 
             characters.forEach(char => {
                 const card = document.getElementById(`select-card-${char.id}`);
