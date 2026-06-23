@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" class="w-full" content="width=device-width, initial-scale=1.0">
-    <title>Cara a Cara - Classico Multiplayer</title>
+    <title>Cara a Cara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <style>
@@ -63,6 +63,7 @@
                         <span id="status-dot-p1" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
                         <span id="status-text-p1" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
                     </div>
+                    <div id="count-red-box" class="text-[10px] text-slate-400 font-bold mt-1 hidden">Restam: <span id="count-red" class="text-amber-400 font-mono">24</span></div>
                 </div>
 
                 <div class="select-none shrink-0 py-0.5 self-center flex items-center space-x-2">
@@ -77,6 +78,7 @@
                         <span id="status-text-p2" class="text-[10px] text-rose-400 font-bold font-mono">Offline</span>
                         <span id="status-dot-p2" class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
                     </div>
+                    <div id="count-blue-box" class="text-[10px] text-slate-400 font-bold mt-1 hidden">Restam: <span id="count-blue" class="text-amber-400 font-mono">24</span></div>
                 </div>
             </div>
 
@@ -89,7 +91,7 @@
         <div id="screen-select" class="w-full space-y-4 text-center">
             <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
                 <h2 id="select-screen-title" class="text-base font-bold text-amber-400">Escolha o SEU Personagem Secreto</h2>
-                <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente tera que adivinhar quem voce escolheu.</p>
+                <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente terá que adivinhar quem você escolheu.</p>
             </div>
             
             <div id="select-grid" class="grid grid-cols-4 gap-2 w-full text-center"></div>
@@ -110,7 +112,7 @@
         <div id="char-confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
             <div class="bg-slate-900 border-2 border-amber-500 p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
                 <h3 id="char-confirm-title" class="text-lg font-black text-amber-400 tracking-wide">CONFIRMAR PERSONAGEM?</h3>
-                <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente tera que adivinhar quem voce escolheu.</p>
+                <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente terá que adivinhar quem você escolheu.</p>
                 <div id="char-confirm-modal-bg" class="w-24 h-32 mx-auto rounded-lg border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow-inner">
                     <img id="char-confirm-modal-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
                 </div>
@@ -133,11 +135,11 @@
         <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
             <div class="bg-slate-900 border-2 border-amber-500 p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
                 <h3 class="text-lg font-black text-amber-400 tracking-wide">CONFIRMAR PALPITE FINAL?</h3>
-                <p class="text-xs text-slate-300">Voce tem certeza que o personagem secreto do seu oponente eh este?</p>
+                <p class="text-xs text-slate-300">Você tem certeza que o personagem secreto do seu oponente é este?</p>
                 <div id="confirm-modal-img-bg" class="w-24 h-32 mx-auto rounded-lg border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow-inner">
                     <img id="confirm-modal-char-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
                 </div>
-                <p class="text-[10px] text-rose-400 bg-rose-950/30 p-2 rounded border border-rose-900/50 font-medium">Atencao: Se voce errar, perdera o jogo imediatamente!</p>
+                <p class="text-[10px] text-rose-400 bg-rose-950/30 p-2 rounded border border-rose-900/50 font-medium">Atenção: Se voce errar, perderá o jogo imediatamente!</p>
                 <div class="flex space-x-3 pt-2">
                     <button onclick="closeConfirmModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl text-xs transition">
                         Cancelar
@@ -204,7 +206,7 @@
                 </div>
 
                 <button id="btn-next-game" onclick="requestNewGame()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
-                    🔄 Jogar Proxima Partida (Novo Jogo)
+                    🔄 Jogar Nova Partida
                 </button>
                 <p id="waiting-opponent-next" class="hidden text-amber-400 text-xs animate-pulse font-medium">Aguardando oponente aceitar novo jogo...</p>
                 <p id="opponent-requested-rematch" class="hidden text-amber-400 text-xs animate-pulse font-medium">Oponente solicitou revanche...</p>
@@ -462,6 +464,7 @@
                 } else if (selectedCharacterId && opponentCharacterId) {
                     buildGameBoard();
                     restoreFlippedCards();
+                    updateRemainingCount();
                 } else {
                     startSelectionStage();
                 }
@@ -493,6 +496,10 @@
                 } else if (data.type === 'TURN_CHANGED') {
                     isMyTurn = true;
                     updateTurnUI();
+                } else if (data.type === 'UPDATE_COUNT') {
+                    const oppCountId = myRole === 'red' ? 'count-blue' : 'count-red';
+                    const el = document.getElementById(oppCountId);
+                    if (el) el.innerText = data.count;
                 }
             });
 
@@ -576,6 +583,8 @@
             document.getElementById('char-confirm-modal').classList.add('hidden');
             
             document.getElementById('game-scoreboard').classList.remove('hidden');
+            document.getElementById('count-red-box').classList.add('hidden');
+            document.getElementById('count-blue-box').classList.add('hidden');
             
             const resetPlacar = (bg, img, placeholder) => {
                 document.getElementById(bg).style.backgroundImage = "none";
@@ -713,6 +722,7 @@
                 if (screenGame.classList.contains('hidden')) {
                     buildGameBoard();
                     restoreFlippedCards();
+                    updateRemainingCount();
                 }
             }
         }
@@ -741,11 +751,26 @@
             });
         }
 
+        function updateRemainingCount() {
+            const flippedCount = document.querySelectorAll('#board-grid .card-flipped').length;
+            const remaining = characters.length - flippedCount;
+            
+            const myCountId = myRole === 'red' ? 'count-red' : 'count-blue';
+            const el = document.getElementById(myCountId);
+            if (el) el.innerText = remaining;
+            
+            if (conn && conn.open) {
+                conn.send({ type: 'UPDATE_COUNT', count: remaining });
+            }
+        }
+
         function buildGameBoard() {
             document.getElementById('char-confirm-modal').classList.add('hidden');
             screenLobby.classList.add('hidden'); 
             screenSelect.classList.add('hidden');
             document.getElementById('game-scoreboard').classList.remove('hidden');
+            document.getElementById('count-red-box').classList.remove('hidden');
+            document.getElementById('count-blue-box').classList.remove('hidden');
             screenGame.classList.remove('hidden');
             isGuessMode = false;
             updateGuessButtonUI();
@@ -783,6 +808,7 @@
             } else {
                 document.getElementById(`board-card-${id}`).classList.toggle('card-flipped');
                 saveGameState();
+                updateRemainingCount();
             }
         }
 
@@ -911,14 +937,14 @@
             }
 
             if (amIWinner) {
-                title.innerText = "🏆 VITORIA!";
+                title.innerText = "🏆 VITÓRIA!";
                 title.className = "text-2xl font-black tracking-wide text-green-400 animate-bounce";
                 box.className = `${playerBgBox} border-2 border-green-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-green-500/10`;
                 
                 if (guessWasWrong) {
-                    msg.innerText = "Voce venceu! O oponente errou o palpite.";
+                    msg.innerText = "Você venceu! O oponente errou o palpite.";
                 } else {
-                    msg.innerText = "Voce adivinhou o personagem do adversario!";
+                    msg.innerText = "Você adivinhou o personagem do adversário!";
                 }
             } else {
                 title.innerText = "💀 DERROTA";
@@ -926,9 +952,9 @@
                 box.className = `${playerBgBox} border-2 border-red-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-red-500/10`;
                 
                 if (guessWasWrong) {
-                    msg.innerText = "Seu palpite foi errado! A vitoria foi do oponente.";
+                    msg.innerText = "Seu palpite foi errado! Vitória do oponente.";
                 } else {
-                    msg.innerText = "O adversario adivinhou seu personagem!";
+                    msg.innerText = "O adversário adivinhou seu personagem!";
                 }
             }
 
@@ -948,14 +974,14 @@
             const labelP1 = document.getElementById('label-p1');
             const labelP2 = document.getElementById('label-p2');
             if (myRole === 'red') {
-                labelP1.innerText = "Voce";
+                labelP1.innerText = "Você";
                 labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
                 labelP2.innerText = "Oponente";
                 labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
             } else {
                 labelP1.innerText = "Oponente";
                 labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
-                labelP2.innerText = "Voce";
+                labelP2.innerText = "Você";
                 labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
             }
 
