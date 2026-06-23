@@ -152,7 +152,7 @@
 
         <!-- TELA DE VITÓRIA / DERROTA -->
         <div id="game-over-screen" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-            <div class="bg-slate-900 border-2 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl" id="game-over-box">
+            <div class="border-2 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl" id="game-over-box">
                 <h2 id="game-over-title" class="text-2xl font-black tracking-wide"></h2>
                 <p id="game-over-msg" class="text-sm text-slate-300 px-2 font-medium leading-tight"></p>
                 
@@ -863,6 +863,7 @@
             const banner = document.getElementById('game-over-guess-banner');
 
             const amIWinner = (winner === myRole);
+            const playerBgBox = myRole === 'red' ? 'bg-red-950' : 'bg-blue-950';
 
             if (guesser === myRole) {
                 if (guessWasWrong) {
@@ -895,7 +896,7 @@
             if (amIWinner) {
                 title.innerText = "🏆 VITÓRIA!";
                 title.className = "text-2xl font-black tracking-wide text-green-400 animate-bounce";
-                box.className = "bg-slate-900 border-2 border-green-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-green-500/10";
+                box.className = `${playerBgBox} border-2 border-green-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-green-500/10`;
                 
                 if (guessWasWrong) {
                     msg.innerText = "Você venceu! O oponente errou o palpite.";
@@ -905,7 +906,7 @@
             } else {
                 title.innerText = "💀 DERROTA";
                 title.className = "text-2xl font-black tracking-wide text-red-500";
-                box.className = "bg-slate-900 border-2 border-red-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-red-500/10";
+                box.className = `${playerBgBox} border-2 border-red-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-red-500/10`;
                 
                 if (guessWasWrong) {
                     msg.innerText = "Seu palpite foi errado! A vitória foi do oponente.";
