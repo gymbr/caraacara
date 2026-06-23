@@ -309,19 +309,21 @@
         function preRenderSelectGrid() {
             const selectGrid = document.getElementById('select-grid');
             if (selectGrid.children.length > 0) return;
+            
+            const bgUrl = myRole === 'red' ? 'img/fundovermelho.png' : 'img/fundoazul.png';
+            
             characters.forEach(char => {
                 const card = document.createElement('div');
                 card.id = `select-card-${char.id}`;
                 card.className = "bg-slate-800 p-1 rounded-xl border border-slate-700 flex flex-col items-center justify-center shadow";
                 card.innerHTML = `
-                    <div style="background-image: url('img/fundovermelho.png'); background-size: cover; background-position: center;" class="w-full rounded-lg border border-slate-700 overflow-hidden text-center">
+                    <div style="background-image: url('${bgUrl}'); background-size: cover; background-position: center;" class="w-full rounded-lg border border-slate-700 overflow-hidden text-center">
                         <img src="${char.url}" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]" loading="lazy" />
                     </div>
                 `;
                 selectGrid.appendChild(card);
             });
         }
-        preRenderSelectGrid();
 
         const urlParams = new URLSearchParams(window.location.search);
         let roomCode = urlParams.get('room');
@@ -339,6 +341,7 @@
                 myRole = 'blue';
             }
 
+            preRenderSelectGrid();
             loadGameState();
 
             const savedGameOver = localStorage.getItem(`cara_game_over_${roomCode}`);
