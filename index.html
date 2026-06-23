@@ -50,7 +50,6 @@
             </div>
         </div>
 
-        <!-- PLACAR GLOBAL DO TOPO -->
         <div id="game-scoreboard" class="hidden w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-2xl flex items-center justify-between relative overflow-hidden mb-3">
             <div id="p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shrink-0 shadow bg-slate-950">
                 <img id="p1-avatar" src="" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)] hidden" />
@@ -150,16 +149,13 @@
             </div>
         </div>
 
-        <!-- TELA DE VITÓRIA / DERROTA -->
         <div id="game-over-screen" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
             <div class="border-2 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl" id="game-over-box">
                 <h2 id="game-over-title" class="text-2xl font-black tracking-wide"></h2>
                 <p id="game-over-msg" class="text-sm text-slate-300 px-2 font-medium leading-tight"></p>
                 
-                <!-- BANNER DE PALPITE STATUS -->
                 <div id="game-over-guess-banner" class="text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border"></div>
 
-                <!-- IMAGEM DO PERSONAGEM PALPITADO -->
                 <div id="game-over-guess-char-container" class="hidden text-center mx-auto my-1 flex flex-col items-center">
                     <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Personagem Palpitado</span>
                     <div id="game-over-guess-char-bg" class="w-16 h-20 p-1 rounded-xl border border-amber-500 bg-cover bg-center flex items-center justify-center overflow-hidden shadow mt-1 bg-slate-950">
@@ -167,7 +163,6 @@
                     </div>
                 </div>
 
-                <!-- PLACAR ESPELHADO INTERNO -->
                 <div id="modal-scoreboard" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-xl flex items-center justify-between relative overflow-hidden">
                     <div class="flex flex-col items-center shrink-0">
                         <div id="modal-p1-avatar-bg" class="w-20 h-28 p-1 rounded-xl border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow bg-slate-950">
@@ -346,6 +341,12 @@
 
             loadGameState();
 
+            // Garante que o estado seja restaurado imediatamente ao recarregar a pagina
+            const savedGameOver = localStorage.getItem(`cara_game_over_${roomCode}`);
+            if (savedGameOver) {
+                applyGameOver(JSON.parse(savedGameOver), true);
+            }
+
             if (myRole === 'red') {
                 initHost(roomCode);
             } else {
@@ -437,7 +438,11 @@
                     conn.send({ type: 'SYNC_CHARACTER', id: selectedCharacterId, isReconnect: true });
                 }
 
-                if (selectedCharacterId && opponentCharacterId) {
+                const savedGameOver = localStorage.getItem(`cara_game_over_${roomCode}`);
+                if (savedGameOver) {
+                    // Se ja esta em game over, mantem a tela intacta
+                    applyGameOver(JSON.parse(savedGameOver), true);
+                } else if (selectedCharacterId && opponentCharacterId) {
                     buildGameBoard();
                     restoreFlippedCards();
                 } else {
@@ -478,6 +483,12 @@
                     updatePresenceUI(false, true);
                 }
                 
+                const savedGameOver = localStorage.getItem(`cara_game_over_${roomCode}`);
+                if (savedGameOver) {
+                    // Se ja estava em game over, nao altera a tela principal do tabuleiro
+                    return;
+                }
+                
                 if (selectedCharacterId && opponentCharacterId) {
                     const btnTurn = document.getElementById('btn-turn');
                     if (btnTurn) {
@@ -508,6 +519,7 @@
                 localStorage.removeItem(`cara_my_char_${roomCode}`);
                 localStorage.removeItem(`cara_opp_char_${roomCode}`);
                 localStorage.removeItem(`cara_flipped_${roomCode}`);
+                localStorage.removeItem(`cara_game_over_${roomCode}`); // Adicionado para limpar estado
             }
             localStorage.removeItem('hosted_room');
             if (conn) conn.close();
@@ -842,7 +854,7 @@
             pendingAccusationId = null;
         }
 
-        function applyGameOver(data) {
+        function applyGameOver(data, isRestore = false) {
             const winner = data.winner;
             const redCharId = data.redCharId;
             const blueCharId = data.blueCharId;
@@ -851,11 +863,14 @@
             const guessedCharId = data.guessedCharId || (guessWasWrong ? wrongGuessCharId : (data.guesser === 'red' ? blueCharId : redCharId));
             const guesser = data.guesser;
 
-            if (winner === 'red') score.red++;
-            if (winner === 'blue') score.blue++;
-            
-            updateScoreboardVisual();
-            saveGameState();
+            if (!isRestore) {
+                if (winner === 'red') score.red++;
+                if (winner === 'blue') score.blue++;
+                
+                updateScoreboardVisual();
+                localStorage.setItem(`cara_game_over_${roomCode}`, JSON.stringify(data));
+                saveGameState();
+            }
 
             const box = document.getElementById('game-over-box');
             const title = document.getElementById('game-over-title');
@@ -977,6 +992,7 @@
                 localStorage.removeItem(`cara_my_char_${roomCode}`);
                 localStorage.removeItem(`cara_opp_char_${roomCode}`);
                 localStorage.removeItem(`cara_flipped_${roomCode}`);
+                localStorage.removeItem(`cara_game_over_${roomCode}`); // Adicionado para limpar estado
                 startSelectionStage();
             }
         }
