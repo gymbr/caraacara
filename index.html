@@ -29,11 +29,6 @@
                         </button>
                     </div>
                 </div>
-                <div class="text-center font-mono text-xs">
-                    <span class="text-red-400 font-bold">V: <span id="score-red">0</span></span>
-                    <span class="text-slate-500 mx-1">x</span>
-                    <span class="text-blue-400 font-bold">A: <span id="score-blue">0</span></span>
-                </div>
                 <button id="btn-leave" onclick="leaveRoom()" class="bg-slate-700 hover:bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 rounded-lg transition shadow">
                     Sair
                 </button>
@@ -42,11 +37,19 @@
             <div class="flex justify-between items-center text-[10px] font-mono border-t border-slate-700/50 pt-1.5">
                 <div class="flex items-center space-x-1">
                     <span id="status-dot-p1" class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                    <span class="text-slate-400">P1 (Vermelho): <strong id="status-text-p1" class="text-rose-400">Offline</strong></span>
+                    <span class="text-slate-400">
+                        <strong class="text-red-400">P1 (Vermelho):</strong> 
+                        <span class="text-slate-300 ml-1 mr-0.5">[V: <span id="score-red">0</span>]</span> 
+                        <strong id="status-text-p1" class="text-rose-400">Offline</strong>
+                    </span>
                 </div>
                 <div class="flex items-center space-x-1">
                     <span id="status-dot-p2" class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                    <span class="text-slate-400">P2 (Azul): <strong id="status-text-p2" class="text-rose-400">Offline</strong></span>
+                    <span class="text-slate-400">
+                        <strong class="text-blue-400">P2 (Azul):</strong> 
+                        <span class="text-slate-300 ml-1 mr-0.5">[V: <span id="score-blue">0</span>]</span> 
+                        <strong id="status-text-p2" class="text-rose-400">Offline</strong>
+                    </span>
                 </div>
             </div>
         </div>
