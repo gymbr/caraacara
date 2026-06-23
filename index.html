@@ -17,7 +17,7 @@
 </head>
 <body class="bg-slate-900 text-white font-sans min-h-screen flex flex-col justify-between transition-colors duration-500">
 
-    <header id="topbar" class="bg-slate-800 p-3 border-b-4 border-slate-700 shadow-md sticky top-0 z-40">
+    <header id="topbar" class="bg-slate-800 p-3 border-b-4 border-slate-700 shadow-md sticky top-0 z-50">
         <div class="max-w-md mx-auto">
             <div class="flex justify-between items-center relative">
                 <div class="flex flex-col">
@@ -38,10 +38,10 @@
 
     <main class="flex-grow flex flex-col items-center justify-center p-3 w-full max-w-md mx-auto mb-12">
         
-        <div id="screen-lobby" class="w-full space-y-6 text-center">
-            <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+        <div id="screen-lobby" class="fixed inset-0 bg-slate-950/80 z-40 flex flex-col items-center justify-center p-6 text-center" style="top: 0;">
+            <div class="bg-slate-900 border-2 border-slate-700 p-6 rounded-2xl max-w-sm w-full shadow-2xl space-y-4">
                 <h2 class="text-xl font-extrabold mb-2">Aguardando Conexão</h2>
-                <p class="text-slate-400 text-xs mb-6">Envie o link da sala para seu oponente usando o botão de compartilhar no topo. O jogo começará assim que ele entrar!</p>
+                <p class="text-slate-400 text-xs">Envie o link da sala para seu oponente usando o botão de compartilhar no topo. O jogo começará assim que ele entrar!</p>
                 
                 <div id="connection-status" class="text-amber-400 text-xs font-medium animate-pulse">
                     Procurando sinal do servidor P2P...
@@ -50,17 +50,13 @@
             </div>
         </div>
 
-        <div id="screen-select" class="hidden w-full space-y-4 text-center">
+        <div id="screen-select" class="w-full space-y-4 text-center">
             <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
-                <h2 class="text-base font-bold text-amber-400">Escolha o SEU Personagem Secreto</h2>
+                <h2 id="select-screen-title" class="text-base font-bold text-amber-400">Escolha o SEU Personagem Secreto</h2>
                 <p class="text-[11px] text-slate-400">Esconda a tela! Seu oponente terá que adivinhar quem você escolheu.</p>
             </div>
             
             <div id="select-grid" class="grid grid-cols-4 gap-2 w-full text-center"></div>
-            
-            <button id="btn-confirm-character" disabled class="w-full bg-slate-700 text-slate-400 font-bold py-3 px-6 rounded-xl cursor-not-allowed text-sm">
-                Selecione um Personagem acima
-            </button>
         </div>
 
         <div id="screen-game" class="hidden w-full space-y-3">
@@ -135,7 +131,10 @@
         <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 z-50 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
             <div class="bg-slate-900 border-2 border-amber-500 p-5 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl">
                 <h3 class="text-lg font-black text-amber-400 tracking-wide">CONFIRMAR PALPITE FINAL?</h3>
-                <p class="text-xs text-slate-300">Você tem certeza que o personagem secreto do seu oponente é o(a) <strong id="confirm-modal-char-name" class="text-white"></strong>?</p>
+                <p class="text-xs text-slate-300">Você tem certeza que o personagem secreto do seu oponente é este?</p>
+                <div id="confirm-modal-img-bg" class="w-24 h-32 mx-auto rounded-lg border border-slate-700 bg-cover bg-center flex items-center justify-center overflow-hidden shadow-inner">
+                    <img id="confirm-modal-char-img" class="w-full h-full object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]">
+                </div>
                 <p class="text-[10px] text-rose-400 bg-rose-950/30 p-2 rounded border border-rose-900/50 font-medium">Atenção: Se você errar, perderá o jogo imediatamente!</p>
                 <div class="flex space-x-3 pt-2">
                     <button onclick="closeConfirmModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl text-xs transition">
@@ -273,6 +272,23 @@
                 });
             }
         }
+
+        function preRenderSelectGrid() {
+            const selectGrid = document.getElementById('select-grid');
+            if (selectGrid.children.length > 0) return;
+            characters.forEach(char => {
+                const card = document.createElement('div');
+                card.id = `select-card-${char.id}`;
+                card.className = "bg-slate-800 p-1 rounded-xl border border-slate-700 flex flex-col items-center justify-center shadow";
+                card.innerHTML = `
+                    <div style="background-image: url('img/fundovermelho.png'); background-size: cover; background-position: center;" class="w-full rounded-lg border border-slate-700 overflow-hidden text-center">
+                        <img src="${char.url}" class="w-full h-auto drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]" loading="lazy" />
+                    </div>
+                `;
+                selectGrid.appendChild(card);
+            });
+        }
+        preRenderSelectGrid();
 
         const urlParams = new URLSearchParams(window.location.search);
         let roomCode = urlParams.get('room');
@@ -471,9 +487,9 @@
             UX_THEME_BG = myRole === 'red' ? 'img/fundovermelho.png' : 'img/fundoazul.png';
 
             if (myRole === 'red') {
-                topbar.className = "bg-red-950 p-3 border-b-4 border-red-700 shadow-md sticky top-0 z-40 text-white";
+                topbar.className = "bg-red-950 p-3 border-b-4 border-red-700 shadow-md sticky top-0 z-50 text-white";
             } else {
-                topbar.className = "bg-blue-950 p-3 border-b-4 border-blue-700 shadow-md sticky top-0 z-40 text-white";
+                topbar.className = "bg-blue-950 p-3 border-b-4 border-blue-700 shadow-md sticky top-0 z-50 text-white";
             }
             updateScoreboardVisual();
         }
@@ -491,6 +507,8 @@
             document.getElementById('char-confirm-modal').classList.add('hidden');
             screenSelect.classList.remove('hidden');
             
+            document.getElementById('select-screen-title').innerText = "Escolha o SEU Personagem Secreto";
+
             const selectGrid = document.getElementById('select-grid');
             selectGrid.innerHTML = '';
 
@@ -508,11 +526,6 @@
                 `;
                 selectGrid.appendChild(card);
             });
-
-            const btn = document.getElementById('btn-confirm-character');
-            btn.disabled = true;
-            btn.className = "w-full bg-slate-700 text-slate-400 font-bold py-3 px-6 rounded-xl cursor-not-allowed text-sm";
-            btn.innerText = "Selecione um Personagem acima";
         }
 
         function selectCharacter(id) {
@@ -541,10 +554,7 @@
             conn.send({ type: 'SYNC_CHARACTER', id: selectedCharacterId });
             saveGameState();
             
-            const btn = document.getElementById('btn-confirm-character');
-            btn.disabled = true;
-            btn.className = "w-full bg-slate-800 text-slate-500 font-bold py-3 px-6 rounded-xl cursor-not-allowed animate-pulse text-sm";
-            btn.innerText = "Aguardando oponente escolher...";
+            document.getElementById('select-screen-title').innerText = "Aguardando oponente escolher...";
 
             characters.forEach(char => {
                 const card = document.getElementById(`select-card-${char.id}`);
@@ -668,7 +678,10 @@
             pendingAccusationId = id;
             const targetChar = characters.find(c => c.id === id);
             
-            document.getElementById('confirm-modal-char-name').innerText = targetChar.name;
+            const myBgUrl = myRole === 'red' ? 'img/fundovermelho.png' : 'img/fundoazul.png';
+            document.getElementById('confirm-modal-img-bg').style.backgroundImage = `url('${myBgUrl}')`;
+            document.getElementById('confirm-modal-char-img').src = targetChar.url;
+            
             document.getElementById('confirm-modal').classList.remove('hidden');
         }
 
