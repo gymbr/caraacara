@@ -154,8 +154,6 @@
                 <h2 id="game-over-title" class="text-2xl font-black tracking-wide"></h2>
                 <p id="game-over-msg" class="text-sm text-slate-300 px-2 font-medium leading-tight"></p>
                 
-                <div id="game-over-guess-banner" class="text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border"></div>
-
                 <div id="game-over-guess-char-container" class="hidden text-center mx-auto my-1 flex flex-col items-center">
                     <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Personagem Palpitado</span>
                     <div id="game-over-guess-char-bg" class="w-16 h-20 p-1 rounded-xl border border-amber-500 bg-cover bg-center flex items-center justify-center overflow-hidden shadow mt-1 bg-slate-950">
@@ -564,7 +562,7 @@
         }
 
         function startSelectionStage() {
-            screenLobby.classList.add('hidden');
+            screenLobby.classList.remove('hidden');
             screenGame.classList.add('hidden');
             document.getElementById('game-over-screen').classList.add('hidden');
             document.getElementById('confirm-modal').classList.add('hidden');
@@ -768,7 +766,6 @@
                         <img src="${char.url}" class="w-full h-auto object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.65)]" />
                     </div>
                 `;
-                boardGrid.appendChild(char.id ? card : null);
                 boardGrid.appendChild(card);
             });
         }
@@ -892,28 +889,9 @@
             const box = document.getElementById('game-over-box');
             const title = document.getElementById('game-over-title');
             const msg = document.getElementById('game-over-msg');
-            const banner = document.getElementById('game-over-guess-banner');
 
             const amIWinner = (winner === myRole);
             const playerBgBox = myRole === 'red' ? 'bg-red-950' : 'bg-blue-950';
-
-            if (guesser === myRole) {
-                if (guessWasWrong) {
-                    banner.innerText = "Seu Palpite: Errado ❌";
-                    banner.className = "text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border bg-rose-950/50 border-rose-500 text-rose-400";
-                } else {
-                    banner.innerText = "Seu Palpite: Correto! ✅";
-                    banner.className = "text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border bg-emerald-950/50 border-emerald-500 text-emerald-400";
-                }
-            } else {
-                if (guessWasWrong) {
-                    banner.innerText = "Palpite do Oponente: Errado ❌";
-                    banner.className = "text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border bg-emerald-950/50 border-emerald-500 text-emerald-400";
-                } else {
-                    banner.innerText = "Palpite do Oponente: Correto! ✅";
-                    banner.className = "text-xs font-black px-4 py-1.5 rounded-xl mx-auto tracking-wider uppercase border bg-rose-950/50 border-rose-500 text-rose-400";
-                }
-            }
 
             if (guessedCharId) {
                 const gChar = characters.find(c => c.id === guessedCharId);
