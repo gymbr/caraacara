@@ -397,7 +397,12 @@
             document.getElementById('loading-peer').classList.remove('hidden');
             updatePresenceUI(true, false);
             
-            if (peer) { try { peer.destroy(); } catch(e){} }
+            if (peer && !peer.destroyed) {
+                document.getElementById('loading-peer').classList.add('hidden');
+                setupTheme();
+                return;
+            }
+
             peer = new Peer(code);
 
             peer.on('open', () => {
@@ -413,7 +418,7 @@
 
             peer.on('error', (err) => {
                 if (err.type === 'unavailable-id') {
-                    setTimeout(() => initHost(code), 2000);
+                    setTimeout(() => initHost(code), 500);
                 }
             });
         }
@@ -430,7 +435,7 @@
             });
 
             peer.on('error', (err) => {
-                setTimeout(() => initGuest(code), 2000);
+                setTimeout(() => initGuest(code), 500);
             });
         }
 
@@ -526,7 +531,7 @@
                 }
                 
                 if (myRole === 'blue') {
-                    setTimeout(() => { if (roomCode) initGuest(roomCode); }, 2000);
+                    setTimeout(() => { if (roomCode) initGuest(roomCode); }, 500);
                 }
             });
         }
@@ -741,16 +746,7 @@
                 document.getElementById(`${p}avatar-placeholder`).classList.add('hidden');
             });
 
-            oponPrefixos.forEach(p => {
-                const bgEl = document.getElementById(`${p}avatar-bg`);
-                if (bgEl) {
-                    bgEl.style.backgroundImage = "none";
-                    bgEl.classList.remove('border-green-500');
-                    bgEl.classList.add('border-slate-700');
-                }
-                document.getElementById(`${p}avatar`).classList.add('hidden');
-                document.getElementById(`${p}avatar-placeholder`).classList.remove('hidden');
-            });
+            // Removido o código que ocultava o placeholder do oponente
         }
 
         function updateRemainingCount() {
@@ -845,7 +841,7 @@
                 btnTurn.disabled = false;
             } else {
                 btnTurn.className = "w-full bg-slate-800 text-slate-500 font-bold py-2.5 rounded-xl text-xs transition border border-slate-700/50 cursor-not-allowed";
-                btnTurn.innerText = "⏳ VEZ DO OPONENTE (Aguardando...)";
+                btnTurn.innerText = "⏳ VEZ DO OPONENTE (Aguarde...)";
                 btnTurn.disabled = true;
             }
         }
