@@ -777,7 +777,12 @@
             isGuessMode = false;
             updateGuessButtonUI();
 
-            isMyTurn = (myRole === 'red');
+            const totalPartidas = score.red + score.blue;
+            if (totalPartidas % 2 === 0) {
+                isMyTurn = (myRole === 'red');
+            } else {
+                isMyTurn = (myRole === 'blue');
+            }
             updateTurnUI();
 
             const myChar = characters.find(c => c.id === selectedCharacterId);
