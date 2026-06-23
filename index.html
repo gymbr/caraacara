@@ -207,6 +207,7 @@
                     🔄 Jogar Proxima Partida (Novo Jogo)
                 </button>
                 <p id="waiting-opponent-next" class="hidden text-amber-400 text-xs animate-pulse font-medium">Aguardando oponente aceitar novo jogo...</p>
+                <p id="opponent-requested-rematch" class="hidden text-amber-400 text-xs animate-pulse font-medium">Oponente solicitou revanche...</p>
             </div>
         </div>
 
@@ -487,6 +488,7 @@
                     applyGameOver(data);
                 } else if (data.type === 'NEXT_GAME_READY') {
                     opponentReadyForNext = true;
+                    document.getElementById('opponent-requested-rematch').classList.remove('hidden');
                     checkNextGameTransition();
                 } else if (data.type === 'TURN_CHANGED') {
                     isMyTurn = true;
@@ -562,7 +564,12 @@
         }
 
         function startSelectionStage() {
-            screenLobby.classList.remove('hidden');
+            if (conn && conn.open) {
+                screenLobby.classList.add('hidden');
+            } else {
+                screenLobby.classList.remove('hidden');
+            }
+            
             screenGame.classList.add('hidden');
             document.getElementById('game-over-screen').classList.add('hidden');
             document.getElementById('confirm-modal').classList.add('hidden');
@@ -904,14 +911,14 @@
             }
 
             if (amIWinner) {
-                title.innerText = "🏆 VITÓRIA!";
+                title.innerText = "🏆 VITORIA!";
                 title.className = "text-2xl font-black tracking-wide text-green-400 animate-bounce";
                 box.className = `${playerBgBox} border-2 border-green-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-green-500/10`;
                 
                 if (guessWasWrong) {
-                    msg.innerText = "Você venceu! O oponente errou o palpite.";
+                    msg.innerText = "Voce venceu! O oponente errou o palpite.";
                 } else {
-                    msg.innerText = "Você adivinhou o personagem do adversário!";
+                    msg.innerText = "Voce adivinhou o personagem do adversario!";
                 }
             } else {
                 title.innerText = "💀 DERROTA";
@@ -919,9 +926,9 @@
                 box.className = `${playerBgBox} border-2 border-red-500 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl shadow-red-500/10`;
                 
                 if (guessWasWrong) {
-                    msg.innerText = "Seu palpite foi errado! A vitória foi do oponente.";
+                    msg.innerText = "Seu palpite foi errado! A vitoria foi do oponente.";
                 } else {
-                    msg.innerText = "O adversário adivinhou seu personagem!";
+                    msg.innerText = "O adversario adivinhou seu personagem!";
                 }
             }
 
@@ -941,14 +948,14 @@
             const labelP1 = document.getElementById('label-p1');
             const labelP2 = document.getElementById('label-p2');
             if (myRole === 'red') {
-                labelP1.innerText = "Você";
+                labelP1.innerText = "Voce";
                 labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
                 labelP2.innerText = "Oponente";
                 labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
             } else {
                 labelP1.innerText = "Oponente";
                 labelP1.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-red-400";
-                labelP2.innerText = "Você";
+                labelP2.innerText = "Voce";
                 labelP2.className = "text-[11px] font-black mt-1 uppercase tracking-wider text-blue-400";
             }
 
@@ -959,6 +966,7 @@
             btnNext.disabled = false;
             btnNext.className = "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm cursor-pointer";
             document.getElementById('waiting-opponent-next').classList.add('hidden');
+            document.getElementById('opponent-requested-rematch').classList.add('hidden');
 
             document.getElementById('game-over-screen').classList.remove('hidden');
         }
@@ -987,6 +995,8 @@
                 localStorage.removeItem(`cara_opp_char_${roomCode}`);
                 localStorage.removeItem(`cara_flipped_${roomCode}`);
                 localStorage.removeItem(`cara_game_over_${roomCode}`);
+                
+                document.getElementById('opponent-requested-rematch').classList.add('hidden');
                 startSelectionStage();
             }
         }
